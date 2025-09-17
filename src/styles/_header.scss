@@ -1,0 +1,56 @@
+@use 'variables' as *;
+
+.header {
+  background-color: $primary-color;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  @media (max-width: 768px) {
+    padding: 8px 16px;
+  }
+  .title {
+    color: #fff;
+    font-size: 36px;
+    font-weight: 700;
+    @media (max-width: 768px) {
+      font-size: 20px;
+    }
+  }
+  .nav {
+    display: flex;
+    gap: 16px;
+    font-size: 24px;
+    @media (max-width: 768px) {
+      display: none;
+    }
+    .nav-item {
+      color: $gray;
+      &.active,
+      &:hover {
+        color: $white;
+        font-weight: 600;
+      }
+    }
+  }
+  .mobile-menu-btn {
+    display: none;
+    @media (max-width: 768px) {
+      display: inline-flex;
+    }
+  }
+}
+
+.drawer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  .drawer-nav-item {
+    color: $primary-color;
+    &.active,
+    &:hover {
+      color: $primary-dark;
+      font-weight: 600;
+    }
+  }
+}
