@@ -1,0 +1,24 @@
+@use 'variables' as *;
+
+.sider {
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  bottom: 0;
+  .title {
+    color: #fff;
+    font-size: 32px;
+    font-weight: 700;
+    text-align: center;
+    margin: 16px;
+    @media (max-width: 768px) {
+      font-size: 20px;
+    }
+  }
+  .menu-items {
+    font-size: 20px;
+    @media (max-width: 768px) {
+      font-size: 16px;
+    }
+  }
+}
