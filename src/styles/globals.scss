@@ -11,6 +11,10 @@
 
 .app-layout {
   min-height: 100vh;
+  height: 100vh;
   min-width: 100vw;
-  background: #f5f5f5;
+  .main-layout {
+    padding: 32px;
+    overflow: auto;
+  }
 }

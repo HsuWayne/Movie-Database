@@ -11,7 +11,9 @@ export function AppLayout({ children }: Props) {
   return (
     <Layout className='app-layout'>
       <Sider />
-      <Content className='main-layout'>{children}</Content>
+      <Content id='main-content' className='main-layout'>
+        {children}
+      </Content>
     </Layout>
   )
 }

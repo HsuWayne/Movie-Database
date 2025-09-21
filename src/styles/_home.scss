@@ -1,0 +1,55 @@
+@use 'variables' as *;
+
+.home-page {
+  .header {
+    margin-bottom: 24px;
+    .title {
+      font-size: 36px;
+      margin: 0;
+      @media (max-width: 576px) {
+        font-size: 20px;
+      }
+    }
+    .movie-type-option {
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .search {
+      margin-bottom: 12px;
+      width: 100%;
+    }
+  }
+  .spin {
+    text-align: center;
+    margin: 24px;
+  }
+
+  .last-page {
+    text-align: center;
+    margin: 24px;
+    color: $dark-gray;
+  }
+
+  .float-button {
+    right: 24px;
+    bottom: 24px;
+  }
+}
+
+.movie-detail-modal {
+  .spin {
+    text-align: center;
+    padding: 50px;
+  }
+  .review {
+    margin-top: 20px;
+    .review-content {
+      border-bottom: 1px solid $dark-gray;
+      margin-bottom: 12;
+      padding-bottom: 12;
+    }
+  }
+  .trailer {
+    margin-top: 20px;
+  }
+}
