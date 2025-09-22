@@ -16,16 +16,32 @@ export default function MovieCard(props: MovieCardProps) {
     <Card
       hoverable
       cover={
-        <Image
-          alt={props.movie.title}
-          src={posterUrl}
-          placeholder={
-            <Skeleton.Image style={{ width: '100%', height: 300 }} active />
-          }
-          preview={false}
-          onClick={() => props.openModal(props.movie.id)}
-          style={{ cursor: 'pointer' }}
-        />
+        <div
+          style={{
+            width: '100%',
+            aspectRatio: '2 / 3',
+            overflow: 'hidden'
+          }}
+        >
+          <Image
+            alt={props.movie.title}
+            src={posterUrl}
+            placeholder={
+              <Skeleton.Image
+                style={{ width: '100%', height: '100%' }}
+                active
+              />
+            }
+            preview={false}
+            onClick={() => props.openModal(props.movie.id)}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              cursor: 'pointer'
+            }}
+          />
+        </div>
       }
     >
       <Card.Meta
