@@ -4,7 +4,11 @@ import type {
   ConvertedMovieDetail,
   MovieDetailResponse
 } from '../types/models'
-import { convertedMovies, getLanguageName } from '../utils/utils'
+import {
+  convertedMovies,
+  getLanguageName,
+  getGenreNames
+} from '../utils/convertMovieDetail'
 import { BASE_URL } from '../types/variables'
 
 const API_KEY = import.meta.env.VITE_API_KEY
@@ -38,6 +42,26 @@ export async function searchMovies(
   return {
     ...res.data,
     results: convertedResults
+  }
+}
+
+export async function searchMovieById(
+  movieId: number
+): Promise<ConvertedMovieDetail> {
+  const res = await axios.get(`${BASE_URL}/movie/${movieId}`, {
+    params: { api_key: API_KEY, language: 'zh-TW' }
+  })
+  const convertedLanguageName: string = getLanguageName(
+    res.data.original_language
+  )
+  const genre_ids = res.data.genres.map(
+    (genre: { id: number; name: string }) => genre.id
+  )
+  const convertedGenreNames: string[] = getGenreNames(genre_ids)
+  return {
+    ...res.data,
+    original_language: convertedLanguageName,
+    genre_ids: convertedGenreNames
   }
 }
 

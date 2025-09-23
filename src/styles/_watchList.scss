@@ -1,0 +1,32 @@
+.watch-list {
+  .header {
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .title {
+      font-size: 36px;
+      margin: 0;
+      @media (max-width: 576px) {
+        font-size: 20px;
+      }
+    }
+    .select {
+      width: 180px;
+    }
+  }
+
+  .float-button {
+    right: 24px;
+    bottom: 24px;
+  }
+}
+
+.empty-icon {
+  margin-top: 40px;
+}
+
+.loading-icon {
+  text-align: center;
+  margin-top: 40px;
+}

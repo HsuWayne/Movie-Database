@@ -52,4 +52,15 @@
   .trailer {
     margin-top: 20px;
   }
+  .collect-icon {
+    font-size: 28px;
+    color: $gray;
+    cursor: pointer;
+    position: absolute;
+    top: 32px;
+    left: 32px;
+    &.collected {
+      color: $red;
+    }
+  }
 }

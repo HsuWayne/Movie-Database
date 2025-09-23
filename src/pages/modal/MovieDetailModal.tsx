@@ -1,8 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Modal, Image, Spin, message, Row, Col } from 'antd'
+import { Modal, Image, Spin, Row, Col } from 'antd'
+import { HeartFilled, HeartOutlined } from '@ant-design/icons'
 import type { MovieDetailResponse } from '../../types/models'
 import placeholderImg from '/assets/No_Image.svg'
 import { getMovieDetail } from '../../api/tmdb'
+import { useWatchList } from '../../contexts/WatchListContext/WatchListContext'
+import { useMessageContext } from '../../contexts/MessageContext/MessageContext'
+import { getMovieDetailCache, setMovieDetailCache } from '../../utils/cache'
 
 interface ModalProps {
   modalVisible: boolean
@@ -11,18 +15,27 @@ interface ModalProps {
 }
 
 export default function MovieDetailModal(props: ModalProps) {
-  const [messageApi, contextHolder] = message.useMessage()
+  const { isWatchList, toggleWatchList } = useWatchList()
+  const { error } = useMessageContext()
   const [loading, setLoading] = useState(false)
   const [detail, setDetail] = useState<MovieDetailResponse>()
 
   useEffect(() => {
     if (!props.selectedMovieId) return
+    const cached = getMovieDetailCache(props.selectedMovieId)
+    if (cached) {
+      setDetail(cached)
+      return
+    }
     setLoading(true)
     getMovieDetail(props.selectedMovieId)
-      .then((data) => setDetail(data))
+      .then((data) => {
+        setDetail(data)
+        setMovieDetailCache(props.selectedMovieId!, data)
+      })
       .catch((err) => {
         console.error(err)
-        messageApi.error('讀取資料失敗, 請稍後再試')
+        error('讀取資料失敗, 請稍後再試')
       })
       .finally(() => setLoading(false))
   }, [props.selectedMovieId])
@@ -49,7 +62,6 @@ export default function MovieDetailModal(props: ModalProps) {
       width={900}
       className='movie-detail-modal'
     >
-      {contextHolder}
       {loading || !detail ? (
         <div className='spin'>
           <Spin size='large' />
@@ -100,6 +112,27 @@ export default function MovieDetailModal(props: ModalProps) {
                 allowFullScreen
               />
             </div>
+          )}
+          {props.selectedMovieId && isWatchList(props.selectedMovieId) ? (
+            <HeartFilled
+              className='collect-icon collected'
+              onClick={(e) => {
+                e.stopPropagation()
+                if (props.selectedMovieId !== null) {
+                  toggleWatchList(props.selectedMovieId)
+                }
+              }}
+            />
+          ) : (
+            <HeartOutlined
+              className='collect-icon'
+              onClick={(e) => {
+                e.stopPropagation()
+                if (props.selectedMovieId !== null) {
+                  toggleWatchList(props.selectedMovieId)
+                }
+              }}
+            />
           )}
         </>
       )}
