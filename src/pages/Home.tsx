@@ -2,13 +2,14 @@ import { useState, useEffect, useCallback } from 'react'
 import * as api from '../api/tmdb'
 import type { ConvertedMovieDetail } from '../types/models'
 import { MovieFilterType } from '../types/variables'
-import { Radio, Row, Col, Spin, FloatButton, Input, message } from 'antd'
+import { Radio, Row, Col, Spin, FloatButton, Input } from 'antd'
+import { useMessageContext } from '../contexts/MessageContext/MessageContext'
 import MovieDetailModal from './modal/MovieDetailModal'
 import MovieCard from '../components/MovieCard'
 
 export default function Home() {
   const { Search } = Input
-  const [messageApi, contextHolder] = message.useMessage()
+  const { error } = useMessageContext()
   const [movieList, setMovieList] = useState<ConvertedMovieDetail[]>([])
   const [movieFilterType, setMovieFilterType] = useState<MovieFilterType>(
     MovieFilterType.NOW_PLAYING
@@ -65,7 +66,7 @@ export default function Home() {
         if (pageNumber >= res.total_pages) setHasMore(false)
       } catch (err) {
         console.error(err)
-        messageApi.error('讀取資料失敗, 請稍後再試')
+        error('讀取資料失敗, 請稍後再試')
       } finally {
         setLoading(false)
       }
@@ -101,7 +102,6 @@ export default function Home() {
 
   return (
     <div className='home-page'>
-      {contextHolder}
       <Row gutter={[16, 16]} align='middle' className='header'>
         <Col xs={24}>
           <h1 className='title'>電影列表</h1>
