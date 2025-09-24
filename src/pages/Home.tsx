@@ -29,7 +29,7 @@ export default function Home() {
 
     if (movieFilterType !== MovieFilterType.SEARCH) {
       setSearchQuery('')
-      loadMovies(1, true)
+      loadMovies(1, true, true)
     }
   }, [movieFilterType])
 
@@ -38,13 +38,13 @@ export default function Home() {
       setMovieList([])
       setPage(1)
       setHasMore(true)
-      if (searchQuery) loadMovies(1, true)
+      if (searchQuery) loadMovies(1, true, true)
     }
   }, [searchQuery])
 
   const loadMovies = useCallback(
-    async (pageNumber: number, replace = false) => {
-      if (loading || !hasMore) return
+    async (pageNumber: number, replace = false, currentHasMore = hasMore) => {
+      if (loading || !currentHasMore) return
       setLoading(true)
       try {
         let res
