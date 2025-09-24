@@ -1,5 +1,3 @@
-import type { MovieDetail, ConvertedMovieDetail } from '../types/models'
-
 const languageMap: Record<string, string> = {
   en: '英文',
   zh: '中文',
@@ -20,7 +18,7 @@ const languageMap: Record<string, string> = {
 }
 
 export function getLanguageName(code: string): string {
-  return languageMap[code] || code
+  return languageMap[code] || code || '未知語言'
 }
 
 const genreMap: Record<number, string> = {
@@ -46,15 +44,7 @@ const genreMap: Record<number, string> = {
 }
 
 export function getGenreNames(ids: number[]): string[] {
-  return ids.map((id) => genreMap[id] || id.toString())
-}
-
-export function convertedMovies(
-  movieList: MovieDetail[]
-): ConvertedMovieDetail[] {
-  return movieList.map((movie: MovieDetail) => ({
-    ...movie,
-    original_language: getLanguageName(movie.original_language),
-    genre_ids: getGenreNames(movie.genre_ids)
-  }))
+  return Array.isArray(ids)
+    ? ids.map((id) => genreMap[id] || id.toString())
+    : []
 }
