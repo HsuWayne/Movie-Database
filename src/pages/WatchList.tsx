@@ -1,12 +1,14 @@
 import { useEffect, useState, useMemo } from 'react'
-import { Row, Col, Spin, Empty, FloatButton, Select } from 'antd'
+import { Row, Col, Spin, Empty, FloatButton } from 'antd'
 import { useWatchList } from '../contexts/WatchListContext/WatchListContext'
 import { useMessageContext } from '../contexts/MessageContext/MessageContext'
 import { searchMovieById } from '../api/tmdb'
-import type { ConvertedMovieDetail, SortOption } from '../types/models'
+import type { ConvertedMovieDetail } from '../types/models'
 import { getMovieCache, setMovieCache } from '../utils/cache'
 import MovieDetailModal from './modal/MovieDetailModal'
 import MovieCard from '../components/MovieCard'
+import SortSelect from '../components/SortSelect'
+import type { SortOption } from '../components/SortSelect'
 
 export default function WatchList() {
   const { watchList } = useWatchList()
@@ -101,18 +103,10 @@ export default function WatchList() {
     <div className='watch-list'>
       <div className='header'>
         <h1 className='title'>我的待看清單</h1>
-        <Select
+        <SortSelect
           value={sortBy}
           onChange={(v) => setSortBy(v)}
           className='select'
-          options={[
-            { label: '上映日期：新 → 舊', value: 'release_desc' },
-            { label: '上映日期：舊 → 新', value: 'release_asc' },
-            { label: '評分：高 → 低', value: 'rating_desc' },
-            { label: '評分：低 → 高', value: 'rating_asc' },
-            { label: '片名：A → Z', value: 'title_asc' },
-            { label: '片名：Z → A', value: 'title_desc' }
-          ]}
         />
       </div>
       <Row gutter={[16, 16]}>

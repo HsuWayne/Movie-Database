@@ -95,11 +95,3 @@ export interface MovieDetailResponse extends MovieDetail {
   videos: Videos
   reviews: Reviews
 }
-
-export type SortOption =
-  | 'release_desc'
-  | 'release_asc'
-  | 'rating_desc'
-  | 'rating_asc'
-  | 'title_asc'
-  | 'title_desc'
