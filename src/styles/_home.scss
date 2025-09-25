@@ -12,11 +12,26 @@
     }
     .movie-type-option {
       flex-wrap: wrap;
-      margin-bottom: 12px;
     }
     .search {
-      margin-bottom: 12px;
       width: 100%;
+    }
+    .select-group {
+      display: flex;
+      align-items: center;
+      .select {
+        width: 100%;
+      }
+      .tooltip-icon {
+        margin-left: 8px;
+        color: $dark-gray;
+        font-size: 20px;
+        cursor: default;
+        &.isStale {
+          color: $yellow;
+          cursor: pointer;
+        }
+      }
     }
   }
   .spin {
