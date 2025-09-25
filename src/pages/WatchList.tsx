@@ -1,5 +1,6 @@
-import { useEffect, useState, useMemo } from 'react'
-import { Row, Col, Spin, Empty, FloatButton } from 'antd'
+import { useEffect, useState, useMemo, useRef } from 'react'
+import { Row, Col, Spin, Empty, FloatButton, Button } from 'antd'
+import { FrownOutlined } from '@ant-design/icons'
 import { useWatchList } from '../contexts/WatchListContext/WatchListContext'
 import { useMessageContext } from '../contexts/MessageContext/MessageContext'
 import { searchMovieById } from '../api/tmdb'
@@ -19,6 +20,8 @@ export default function WatchList() {
   const [modalVisible, setModalVisible] = useState(false)
   const [targetEl, setTargetEl] = useState<HTMLElement | null>(null)
   const [sortBy, setSortBy] = useState<SortOption>('release_desc')
+  const movieRefs = useRef<Record<number, HTMLDivElement | null>>({})
+  const lotteryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     if (watchList.length === 0) {
@@ -77,6 +80,49 @@ export default function WatchList() {
     if (!targetEl) setTargetEl(contentEl)
   }, [])
 
+  const runLottery = () => {
+    if (movieList.length === 0) return
+
+    const rounds = 8
+    let currentIndex = 0
+    let delay = 200
+    const delayIncrement = 100
+
+    const randomIndices: number[] = []
+    for (let i = 0; i < rounds; i++) {
+      let nextIndex: number
+      do {
+        nextIndex = Math.floor(Math.random() * movieList.length)
+      } while (i > 0 && nextIndex === randomIndices[i - 1])
+      randomIndices.push(nextIndex)
+    }
+
+    const nextHighlight = () => {
+      if (currentIndex > 0) {
+        const prevId = movieList[randomIndices[currentIndex - 1]].id
+        const prevEl = movieRefs.current[prevId]
+        prevEl?.classList.remove('lottery-highlight')
+      }
+      if (currentIndex < rounds) {
+        const id = movieList[randomIndices[currentIndex]].id
+        const el = movieRefs.current[id]
+        if (el) {
+          el.classList.add('lottery-highlight')
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+        currentIndex++
+        lotteryTimerRef.current = setTimeout(nextHighlight, delay)
+        delay += delayIncrement
+      } else {
+        const finalId = movieList[randomIndices[rounds - 1]].id
+        openModal(finalId)
+        lotteryTimerRef.current = null
+      }
+    }
+
+    nextHighlight()
+  }
+
   const openModal = (movieId: number) => {
     setSelectedMovieId(movieId)
     setModalVisible(true)
@@ -101,18 +147,33 @@ export default function WatchList() {
 
   return (
     <div className='watch-list'>
-      <div className='header'>
-        <h1 className='title'>我的待看清單</h1>
-        <SortSelect
-          value={sortBy}
-          onChange={(v) => setSortBy(v)}
-          className='select'
-        />
-      </div>
+      <Row gutter={[16, 16]} className='header'>
+        <Col xs={24} lg={12}>
+          <h1 className='title'>我的待看清單</h1>
+        </Col>
+        <Col xs={24} md={12} lg={6} className='col-right-center'>
+          <SortSelect
+            value={sortBy}
+            onChange={(v) => setSortBy(v)}
+            className='select'
+          />
+        </Col>
+        <Col xs={24} md={12} lg={6} className='col-right-center'>
+          <Button type='primary' onClick={runLottery} icon={<FrownOutlined />}>
+            無法決定要看什麼嗎?
+          </Button>
+        </Col>
+      </Row>
       <Row gutter={[16, 16]}>
         {sortedMovies.map((movie) => (
           <Col key={movie.id} sm={24} md={12} lg={6}>
-            <MovieCard movie={movie} openModal={openModal} />
+            <div
+              ref={(el) => {
+                movieRefs.current[movie.id] = el ?? null
+              }}
+            >
+              <MovieCard movie={movie} openModal={openModal} />
+            </div>
           </Col>
         ))}
       </Row>
