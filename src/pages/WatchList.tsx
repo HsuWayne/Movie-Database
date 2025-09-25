@@ -81,7 +81,7 @@ export default function WatchList() {
   }, [])
 
   const runLottery = () => {
-    if (movieList.length === 0) return
+    if (movieList.length <= 1) return
 
     const rounds = 8
     let currentIndex = 0
@@ -159,7 +159,12 @@ export default function WatchList() {
           />
         </Col>
         <Col xs={24} md={12} lg={6} className='col-right-center'>
-          <Button type='primary' onClick={runLottery} icon={<FrownOutlined />}>
+          <Button
+            onClick={runLottery}
+            icon={<FrownOutlined />}
+            className='button'
+            disabled={movieList.length <= 1}
+          >
             無法決定要看什麼嗎?
           </Button>
         </Col>
